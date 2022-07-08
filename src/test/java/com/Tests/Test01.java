@@ -2,25 +2,20 @@ package com.Tests;
 
 
 import com.Config.DriverConfig;
+import com.Helpers.ReportsHelper;
+import com.Utils.ScreenShots;
 import com.Model.Person;
 import com.Pages.*;
-import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.junit.jupiter.api.*;
 
 class Test01 {
-	static ExtentSparkReporter spark;
-	static ExtentReports extent;
 
 	@BeforeAll
 	public static void setupDriver(){
-		spark = new ExtentSparkReporter("target/Spark.html");
-		extent = new ExtentReports();
-
-		extent.attachReporter(spark);
-
-
+		ReportsHelper.crear(Test01.class.getName());
 
 		DriverConfig.setup("chrome");
 		DriverConfig.goHome();
@@ -29,13 +24,21 @@ class Test01 {
 
 	@Test
 	@Tag("Smoke")
-	@DisplayName("Proceso de registro")
+	@DisplayName("TC - Proceso de registro")
 	public void test() throws InterruptedException {
-		CustomerLoginServices login = new CustomerLoginServices(DriverConfig.driver);
-		RegisterServices register = new RegisterServices(DriverConfig.driver);
-		HomeServices home = new HomeServices(DriverConfig.driver);
+		ExtentTest test = ReportsHelper.extent.createTest("TC - Proceso de registro");
+		test.info("Inicio de test");
+
+		CustomerLoginServices login = new CustomerLoginServices(DriverConfig.getDriver());
+		RegisterServices register = new RegisterServices(DriverConfig.getDriver());
+		HomeServices home = new HomeServices(DriverConfig.getDriver());
 
 		Person person = new Person();
+
+		test.log(Status.INFO, "Datos del usuario a registrar: " + person);
+
+
+		RegisterPage registerPage = new RegisterPage();
 
 		login.clickRegister();
 
@@ -55,15 +58,28 @@ class Test01 {
 		register.clickRegister();
 
 		Thread.sleep(1000);
-		Assertions.assertTrue(home.textRightPanel().contains("Your account was created successfully. You are now"));
 
-		extent.createTest("Nombre test").log(Status.PASS, "Correcto");
-		extent.flush();
+		Boolean result =
+				home.textRightPanel().contains("Your account was created successfully. You are now");
+
+		if (result) {
+			test.pass("Contiene el texto");
+		} else {
+			test.fail("NO contiene el texto");
+		}
+
+		test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
+				ScreenShots.screenShot(DriverConfig.getDriver(), Test01.class.getName() + "capture.png")
+		).build());
+
+		Assertions.assertTrue(result);
 	}
 
 	@AfterAll
 	public static void end(){
 		DriverConfig.quit();
+
+		ReportsHelper.extent.flush();
 	}
 
 }

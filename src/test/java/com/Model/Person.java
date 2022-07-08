@@ -2,8 +2,10 @@ package com.Model;
 
 import com.github.javafaker.Faker;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Person {
 
     private String firtsName;
@@ -22,8 +24,6 @@ public class Person {
     }
 
     private void create(){
-        Faker faker = new Faker();
-
         this.firtsName = Faker.instance().name().firstName();
         this.lastName = Faker.instance().name().lastName();
         this.address = Faker.instance().address().streetAddress();
