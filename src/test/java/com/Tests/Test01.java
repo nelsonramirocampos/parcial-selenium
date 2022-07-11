@@ -59,6 +59,21 @@ class Test01 {
 
 		Thread.sleep(1000);
 
+		Boolean result_register = home.textRightPanel().contains("This username already exists.");
+		if(!result_register){
+			test.pass("Se registro correctamente");
+		}
+		else{
+			test.fail("Error al registrarse");
+		}
+
+		test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
+				ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
+		).build());
+
+		Assertions.assertTrue(!result_register);
+
+
 		Boolean result =
 				home.textRightPanel().contains("Your account was created successfully. You are now");
 
@@ -69,7 +84,7 @@ class Test01 {
 		}
 
 		test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
-				ScreenShots.screenShot(DriverConfig.getDriver(), Test01.class.getName() + "capture.png")
+				ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
 		).build());
 
 		Assertions.assertTrue(result);

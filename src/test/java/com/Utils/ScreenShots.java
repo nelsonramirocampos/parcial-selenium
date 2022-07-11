@@ -8,11 +8,13 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ScreenShots {
 
     public static String screenShot(WebDriver driver, String fileName) {
-        String pathname = Parametrs.FOLDER_REPORTS.getParameter() + Parametrs.FOLDER_SCREENSHOTS.getParameter() + fileName;
+        String pathname = Parametrs.FOLDER_REPORTS.getParameter() + Parametrs.FOLDER_SCREENSHOTS.getParameter() + currentDateAndTime() + "_" + fileName;
 
         //Convert web driver object to TakeScreenshot
         TakesScreenshot scrShot =((TakesScreenshot) driver);
@@ -30,6 +32,10 @@ public class ScreenShots {
             e.printStackTrace();
         }
 
-        return Parametrs.FOLDER_SCREENSHOTS.getParameter() + fileName;
+        return pathname.replace(Parametrs.FOLDER_REPORTS.getParameter(), "");
+    }
+
+    private static String currentDateAndTime(){
+        return new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Calendar.getInstance().getTime());
     }
 }

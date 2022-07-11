@@ -15,4 +15,8 @@ public class AccountDetailsPage {
 
     @FindBy(xpath = "//input[@value='Go']")
     private WebElement btn_go;
+
+    @FindBy(xpath = "//table[@id='transactionTable']")
+    private WebElement tbl_transactions;
+
 }

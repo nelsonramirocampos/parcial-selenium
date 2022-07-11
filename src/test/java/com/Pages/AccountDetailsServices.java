@@ -22,4 +22,8 @@ public class AccountDetailsServices {
     public void clickGo(){
         this.page.getBtn_go().click();
     }
+
+    public Boolean isVisibleTransactionsTable(){
+        return this.page.getTbl_transactions().isDisplayed();
+    }
 }

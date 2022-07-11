@@ -44,6 +44,21 @@ public class Test06 {
         login.writeUserName(User.USUARIO.getUserName());
         login.writeUserPassword(User.USUARIO.getUserPassword());
         login.clickLogin();
+
+        Boolean result_login = home.textRightPanel().contains("The username and password could not be verified.");
+        if(!result_login){
+            test.pass("Se inicio correctamente la sesión");
+        }
+        else{
+            test.fail("Error al iniciar sesión");
+        }
+
+        test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
+                ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
+        ).build());
+
+        Assertions.assertTrue(!result_login);
+
         account.clickAccountsOverview();
 
 
@@ -56,7 +71,7 @@ public class Test06 {
         }
 
         test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
-                ScreenShots.screenShot(DriverConfig.getDriver(),Test06.class.getName() + "capture.png")
+                ScreenShots.screenShot(DriverConfig.getDriver(),"capture.png")
         ).build());
 
         Assertions.assertTrue(result);

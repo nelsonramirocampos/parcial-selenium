@@ -44,7 +44,21 @@ public class Test05 {
         login.writeUserPassword(User.USUARIO.getUserPassword());
         login.clickLogin();
 
+        Boolean result_login = home.textRightPanel().contains("The username and password could not be verified.");
+        if(!result_login){
+            test.pass("Se inicio correctamente la sesión");
+        }
+        else{
+            test.fail("Error al iniciar sesión");
+        }
 
+        test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
+                ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
+        ).build());
+
+        Assertions.assertTrue(!result_login);
+
+        //Agregar validación que se visualice que se inicio sesión, sino, muestré que falló.
         account.clickAccountsOverview();
 
         Assertions.assertTrue(home.textRightPanel().contains("*Balance includes deposits that may be subject to holds"));
@@ -60,11 +74,20 @@ public class Test05 {
         accountDetails.selectType("All");
         accountDetails.clickGo();
 
+        Thread.sleep(2000);
+
+        if(accountDetails.isVisibleTransactionsTable()){
+            test.pass("Se visualiza la tabla con las transacciones");
+        }
+        else{
+            test.fail("Error al visualizar la tabla de transacciones");
+        }
+
         test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
-                ScreenShots.screenShot(DriverConfig.getDriver(),Test05.class.getName() + "capture.png")
+                ScreenShots.screenShot(DriverConfig.getDriver(),"capture.png")
         ).build());
 
-        test.pass("Completo");
+        Assertions.assertTrue(accountDetails.isVisibleTransactionsTable());
     }
 
 

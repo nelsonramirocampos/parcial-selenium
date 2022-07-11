@@ -12,6 +12,10 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import org.junit.jupiter.api.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
 public class Test02 {
     @BeforeAll
     public static void setupDriver(){
@@ -43,6 +47,20 @@ public class Test02 {
         login.writeUserPassword(User.USUARIO.getUserPassword());
         login.clickLogin();
 
+        Boolean result_login = home.textRightPanel().contains("The username and password could not be verified.");
+        if(!result_login){
+            test.pass("Se inicio correctamente la sesión");
+        }
+        else{
+            test.fail("Error al iniciar sesión");
+        }
+
+        test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
+                ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
+        ).build());
+
+        Assertions.assertTrue(!result_login);
+
 
         account.clickOpenNewAccount();
         account.selectTypeAccount("SAVINGS");
@@ -63,7 +81,7 @@ public class Test02 {
         }
 
         test.log(Status.INFO, MediaEntityBuilder.createScreenCaptureFromPath(
-                ScreenShots.screenShot(DriverConfig.getDriver(),Test02.class.getName() + "capture.png")
+                ScreenShots.screenShot(DriverConfig.getDriver(), "capture.png")
         ).build());
 
         Assertions.assertTrue(result);
